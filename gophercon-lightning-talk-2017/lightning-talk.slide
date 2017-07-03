@@ -1,0 +1,139 @@
+Roku and Amazon Video Catalog Feeds using Worker Pools
+GopherCon 2017 Lightnight Talks
+15:04 2 Jan 2006
+Tags: foo, bar, baz
+
+Blain Smith
+CTO, Odd Networks
+http://oddnetworks.com
+http://blainsmith.com
+@blainsmith
+
+* ctx.Value(service.OddNetworks)
+
+- Odd Networks is 2 years old
+- Integration platform for video metadata
+- API support for Vimeo, Livestream, JWPlayer, Brightcove, Ooyala (sorry no YouTube cuz TOS)
+- Native SDK and app support for Roku, Amazon FireTV, GoogleTV, AppleTV, all mobile
+- 4 engineers including myself
+
+* How Roku and Amazon FireTV Search Works
+
+- Provide API endpoint that responds with device platform feed format
+- Device platforms periodically poll that API endpoint for and updated feed
+- Update their internal search index and make available to viewers
+
+.image https://sdkdocs.roku.com/download/attachments/3737679/searchscreen80.jpg?version=1&modificationDate=1447880765026&api=v2
+
+* Roku Global Search
+
+Sample XML feed format.
+
+  <?xml version="1.0" encoding="utf-8"?>
+  <partnerContent>
+    <movies>
+      <movie id="{content provider id}">
+        <titles>
+          <title language="en">sample series title</title>
+        </titles>
+        <images>
+          <!--Image Dimensions must be 240x360. If language is not provided, en is used.-->
+          <image language="en" category="Poster Art" width="240" height="360">
+            <url>http://yourdomain.com/path_to_image/image_name.png</url>
+          </image>
+        </images>
+        <descriptions>
+        ...
+
+Reference:
+.link https://sdkdocs.roku.com/display/sdkdoc/Roku+Search
+
+* Amazon FireTV Catalog Data
+
+Sample XML feed format.
+
+  <?xml version="1.0" encoding="utf-8" ?>
+  <Catalog xmlns="http://www.amazon.com/FireTv/2014-04-11/ingestion" version="FireTv-v1.3">
+    <Partner>Everything Ever Made Filmworks</Partner>
+    <Works>
+      <Movie>
+        <ID>MV-345678</ID>
+        <ExternalID scheme="imdb">tt0000000</ExternalID>
+        <ExternalID scheme="tms">MV000000000000</ExternalID>
+        <Title locale="en-US">A Human Life</Title>
+        <Copyright locale="en-US">© 2014 Amazon Studios</Copyright>
+        <Offers>
+          <SubscriptionOffer>
+          ...
+
+Reference:
+.link https://developer.amazon.com/public/solutions/devices/fire-tv/docs/catalog/integrating-your-catalog-with-fire-tv
+
+* The Problem
+
+1. For every client we need to generate a `roku.xml` and `firetv.xml` feed if they have apps submitted to those platforms.
+
+2. Roku polls the API endpoint every 4 hours and Amazon polls every hour.
+
+3. Generating feeds on-demand is not an option since it would result in n*2 simultaneous requests every 1-4 hours.
+
+* The Solution
+
+1. Create a worker pool of feed jobs
+
+2. Once the worker is finish with the jobs wait for a period of time and rerun all jobs
+
+3. Each job operates on a single client-platform feed and writes it to S3
+
+4. Service static file from S3 when platforms request feed updates
+
+* Roku Pool
+
+.code code/roku-global-search.go /START StartPool OMIT/,/END StartPool OMIT/
+
+* Roku Worker
+
+.code code/roku-global-search.go /START Worker1 OMIT/,/END Worker1 OMIT/
+
+* Roku Worker (continues)
+
+.code code/roku-global-search.go /START Worker2 OMIT/,/END Worker2 OMIT/
+
+* main.go
+
+.code code/roku-global-search.go /START main OMIT/,/END main OMIT/
+
+* Results
+
+- N workers for each feed generator and the pool itself can sleep for a configurable amount of time
+- We run 5 workers per feed type and the pool sleeps for an hour
+- We generate about 50 feeds in ~15 seconds depending on the size of a catalog and availablility of the pool
+
+  ...
+  ts=2017-07-03T18:10:29.834098625Z pool=rgs channel=gophercon worker=start
+  ts=2017-07-03T18:10:29.835447462Z pool=rgs channel=gophercon step="fetching catalog items from db"
+  ts=2017-07-03T18:10:29.835447462Z pool=rgs channel=gophercon step="encoding to XML"
+  ts=2017-07-03T18:10:29.834139203Z pool=rgs channel=gophercon step="streaming to S3" file=odd-feeds/rgs/gophercon.xml
+  ts=2017-07-03T18:10:31.027703837Z pool=rgs channel=gophercon worker=finish ms=1555
+    ...
+
+* Results (continues)
+
+http://oddworks.io/feeds/gophercon.xml?token=shhh
+
+- Public API now serves static xml from S3
+- REST server and worker service each run on a very small Heroku dyno
+- Averages ~40MB memory usage when generating all feeds
+- Averages 500ms response time service the large static xml files
+- Largest catalog takes 7 seconds to generate (25,000 line XML file)
+
+* Takeaways
+
+- Look into concurrency patterns that fit your use case
+- Stream data when possible and utilize `io.Pipe()`
+- JSON/XML is trivial in stdlib
+
+Reference:
+.link https://blog.golang.org/advanced-go-concurrency-patterns
+.link https://godoc.org/io#Pipe
+.link https://godoc.org/encoding
