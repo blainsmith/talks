@@ -1,17 +1,18 @@
 Roku and Amazon Video Catalog Feeds using Worker Pools
-GopherCon 2017 Lightnight Talks
+GopherCon 2017 Lightning Talks
 15 Jul 2017
 
 Blain Smith
 CTO, Odd Networks
 http://oddnetworks.com
 http://bearded.af
+http://github.com/blainsmith/talks
 @blainsmith
 
 * ctx.Value(service.OddNetworks)
 
 - Odd Networks is 2 years old
-- Integration platform for video metadata
+- Integration platform for video and playlist metadata
 - API support for Vimeo, Livestream, JWPlayer, Brightcove, Ooyala (sorry no YouTube cuz TOS)
 - Native SDK and app support for Roku, Amazon FireTV, GoogleTV, AppleTV, all mobile
 - 4 engineers including myself
@@ -80,11 +81,11 @@ Reference:
 
 1. Create a worker pool of feed jobs
 
-2. Once the worker is finish with the jobs wait for a period of time and rerun all jobs
+2. Once the worker is finished with the jobs wait for a period of time and rerun all jobs
 
 3. Each job operates on a single client-platform feed and writes it to S3
 
-4. Service static file from S3 when platforms request feed updates
+4. Serve the static feed file from S3 when platforms request feed updates
 
 * Roku Pool
 
