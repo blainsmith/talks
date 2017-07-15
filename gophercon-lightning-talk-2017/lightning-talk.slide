@@ -17,6 +17,10 @@ http://github.com/blainsmith/talks
 - Native SDK and app support for Roku, Amazon FireTV, GoogleTV, AppleTV, all mobile
 - 4 engineers including myself
 
+Customers
+.link https://itpro.tv
+.link https://ridetvgo.com
+
 * How Roku and Amazon FireTV Search Works
 
 - Provide API endpoint that responds with device platform feed format
@@ -32,9 +36,9 @@ Sample XML feed format.
   <?xml version="1.0" encoding="utf-8"?>
   <partnerContent>
     <movies>
-      <movie id="{content provider id}">
+      <movie id="odd-ridetvgo-video-12345">
         <titles>
-          <title language="en">sample series title</title>
+          <title language="en">Notable Horse Trainers</title>
         </titles>
         <images>
           <!--Image Dimensions must be 240x360. If language is not provided, en is used.-->
@@ -54,14 +58,12 @@ Sample XML feed format.
 
   <?xml version="1.0" encoding="utf-8" ?>
   <Catalog xmlns="http://www.amazon.com/FireTv/2014-04-11/ingestion" version="FireTv-v1.3">
-    <Partner>Everything Ever Made Filmworks</Partner>
+    <Partner>RideTV GO</Partner>
     <Works>
       <Movie>
-        <ID>MV-345678</ID>
-        <ExternalID scheme="imdb">tt0000000</ExternalID>
-        <ExternalID scheme="tms">MV000000000000</ExternalID>
-        <Title locale="en-US">A Human Life</Title>
-        <Copyright locale="en-US">© 2014 Amazon Studios</Copyright>
+        <ID>odd-ridetvgo-video-12345</ID>
+        <Title locale="en-US">Notable Horse Trainers</Title>
+        <Copyright locale="en-US">© 2017 RideTV GO</Copyright>
         <Offers>
           <SubscriptionOffer>
           ...
@@ -110,16 +112,16 @@ Reference:
 - We generate about 50 feeds in ~15 seconds depending on the size of a catalog and availablility of the pool
 
   ...
-  ts=2017-07-03T18:10:29.834098625Z pool=rgs channel=gophercon worker=start
-  ts=2017-07-03T18:10:29.835447462Z pool=rgs channel=gophercon step="fetching catalog items from db"
-  ts=2017-07-03T18:10:29.835447462Z pool=rgs channel=gophercon step="encoding to XML"
-  ts=2017-07-03T18:10:29.834139203Z pool=rgs channel=gophercon step="streaming to S3" file=odd-feeds/rgs/gophercon.xml
-  ts=2017-07-03T18:10:31.027703837Z pool=rgs channel=gophercon worker=finish ms=1555
+  ts=2017-07-03T... pool=rgs channel=ridetvgo worker=start
+  ts=2017-07-03T... pool=rgs channel=ridetvgo step="fetching catalog items from db"
+  ts=2017-07-03T... pool=rgs channel=ridetvgo step="encoding to XML"
+  ts=2017-07-03T... pool=rgs channel=ridetvgo step="streaming to S3" file=odd-feeds/rgs/ridetvgo.xml
+  ts=2017-07-03T... pool=rgs channel=ridetvgo worker=finish ms=1555
     ...
 
 * Results (continues)
 
-http://oddworks.io/feeds/gophercon.xml?token=shhh
+http://oddworks.io/feeds/ridetvgo.xml?token=shhh
 
 - Public API now serves static xml from S3
 - REST server and worker service each run on a very small Heroku dyno
