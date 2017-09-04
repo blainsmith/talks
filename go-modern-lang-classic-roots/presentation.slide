@@ -1,0 +1,164 @@
+Go: Modern Language with Classic Roots
+Sharatoga TechTalks
+20 Sep 2017
+
+Blain Smith
+http://bearded.af
+http://github.com/blainsmith/talks
+http://agnostechvalley.com
+@blainsmith
+@agnostechvalley
+
+* What is Go?
+
+- Compiled
+- Type-safe
+- Concurrency
+- Garbage Collection
+
+* Who created Go?
+
+Lots of smart Googlers whiteboarded in late-2007 and Go 1.0 releases in 2012
+
+- Robert Griesemer: 15 years in C++, language designer
+- Rob Pike (@rob_pike): AT&T Bell Labs, Plan9 system designer, first window system for Unix
+- Ken Thompson: AT&T Bell Labs, Plan9 system designer, created B programming language
+- Russ Cox (@_rsc): Go compiler work
+- Ian Lance Tayler: Go compiler work
+
+* Biggest Question: Why create Go?
+
+- Not many new systems languages created in over a decade
+- Very connected world with the internet
+- Moved on from single core to multi core machines
+- Massive clusters of computers
+- Older systems languages like C and C++ designed prior to these advancements
+
+Native* Perl, PHP, Node, Ruby?
+
+- Dynamic languages with no type safety
+- Single threaded processes so no true concurrency
+- Interpreted and not compiled into executables
+
+"Native" meaning support in the standard library without extra tooling or server setup.
+
+* GOals
+
+- Safety: type and memory safe
+- Offer concurrency and communication
+- Efficient low-latency garbage collection
+- Fast compile
+
+* Go's Design
+
+- Few orthogonal concepts rather than a lot of overlapping ones
+- Very small keyword list (new, make, for, select, etc...)
+- Reduce studdering: `foo.Foo *myFoo = new foo.Foo(foo.FOO_INIT)`
+- Strong object-oriented design, but type hierarchies (Java): a Child is a Person, a Guardian is a Person, a Person is a Human, a Human is a Mammal, etc..
+- Robust toolset for compiling, testing, profiling, and debugging
+
+* Hello World!
+
+1. Save source
+2. Send to server over internet
+3. Compile
+4. Run on remote server
+5. Send results back
+
+.play code/helloworld.go
+
+.link http://play.golang.org
+
+* Go's Highlights
+
+- Object-oriented with virtual interfaces
+- Concurrency with goroutines and channels
+- Built-in modern tooling
+
+* Object-Oriented: Java Inheritence
+
+.code code/inheritence.java
+
+* Object-Oriented: Java Interfaces
+
+.code code/interface.java
+
+* Object-Oriented: Go Interfaces
+
+Go's approach to object-oriented programming. No extends or implments needed.
+
+.code code/interface.go /START decl OMIT/,/END decl OMIT/
+
+* Object-Oriented: Go Interfaces (cont.)
+
+.play code/interface.go /START main OMIT/,/END main OMIT/
+
+- Both Developer and Designer implement (have a method) `Name() string` so they satisfy Person
+- Methods can be added to any type to implement an interface
+- Introduces more flexibility when creating objects and interfaces
+- Makes extending and interacting with the Go standard libary very nice
+
+* Goroutines and Channels
+
+- Concurrency is hard. PERIOD!
+- Concurrency is worse when there is no garbage collection.
+- Use channels to communicate between separately running goroutines.
+
+.play code/serial.go
+
+* Goroutines and Channels (cont.)
+
+.play code/goroutines.go
+
+* Goroutines and Channels (cont.)
+
+.play code/channels.go
+
+* Tooling: Cross Compile
+
+.code code/cross-compile.txt
+
+Many different permutations of GOOS and GOARCH.
+
+.link https://build.golang.org
+
+* Tooling: Performance Profiling
+
+.image https://blog.golang.org/profiling-go-programs_havlak1a-75.png
+
+* Tooling: Performance Profiling (cont.)
+
+.code code/memory-usage.txt
+
+* Go Uses?
+
+*Who*
+
+- Google (of course)
+- CDNs like CloudFlare & Fastly
+- Dropbox
+- SoundCloud
+- Netflix
+
+*What*
+
+- Containerization: Docker, Kubernetes
+- Databases: InfluxDB, CockroachDB, DGraph
+- Web Services: Prometheus (monitoring), Gogs (self-hosted Git), Geth (Ethereum-based blockchain)
+- AI & Machine Learning
+
+* Go Benefits for Everyone
+
+*Developers*
+
+- Type safety, concurrency, and great tooling
+- Compile object files without the need for a VM (JVM, LVVM, BEAM)
+- Offers a dynamic language feel with interfaces and built-in reflect package
+- StdLib: Math, OS, IO, HTTP, Hashing, Networking, Logging, CLI Parsing
+- Side effect of learning idioms and concepts that stem from classic computer science
+
+*Businesses*
+
+- Go developers are increasing in numbers
+- Lower infrastructure costs due to lower memory and processing needs
+- Robust production systems reduce developer context switching for support and bug fixes

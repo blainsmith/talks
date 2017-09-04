@@ -1,0 +1,23 @@
+(pprof) list FindLoops
+Total: 82.4 MB
+ROUTINE ====================== main.FindLoops in /loops.go
+  56.3   56.3 Total MB (flat / cumulative)
+...
+   1.9    1.9  268:     nonBackPreds := make([]map[int]bool, size)
+   5.8    5.8  269:     backPreds := make([][]int, size)
+     .      .  270:
+   1.9    1.9  271:     number := make([]int, size)
+   1.9    1.9  272:     header := make([]int, size, size)
+   1.9    1.9  273:     types := make([]int, size, size)
+   1.9    1.9  274:     last := make([]int, size, size)
+   1.9    1.9  275:     nodes := make([]*UnionFindNode, size, size)
+     .      .  276:
+     .      .  277:     for i := 0; i < size; i++ {
+   9.5    9.5  278:             nodes[i] = new(UnionFindNode)
+     .      .  279:     }
+...
+     .      .  286:     for i, bb := range cfgraph.Blocks {
+     .      .  287:             number[bb.Name] = unvisited
+  29.5   29.5  288:             nonBackPreds[i] = make(map[int]bool)
+     .      .  289:     }
+...
