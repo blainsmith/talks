@@ -16,7 +16,7 @@ Class Developer extends Person {
     // Designer-related properties
 }
 
-Person john = new Designer();
-john.name();
+Person eric = new Designer();
+eric.name();
 Person sally = new Developer();
 sally.name();

@@ -31,7 +31,7 @@ func MyNameIs(p Person) {
 }
 
 func main() {
-	var designer = Designer{FirstName: "John", LastName: "Appleseed"}
+	var designer = Designer{FirstName: "Eric", LastName: "Strowb"}
 	var developer = Developer(87)
 
 	MyNameIs(designer)

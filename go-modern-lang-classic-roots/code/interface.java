@@ -17,7 +17,7 @@ Class Developer implements Person {
     }
 }
 
-Person john = new Designer();
-john.name();
+Person eric = new Designer();
+eric.name();
 Person sally = new Developer();
 sally.name();
