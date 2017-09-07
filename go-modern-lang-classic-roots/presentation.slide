@@ -53,8 +53,8 @@ Native* Perl, PHP, Node, Ruby?
 
 - Few orthogonal concepts rather than a lot of overlapping ones
 - Very small keyword list (new, make, for, select, etc...)
-- Reduce studdering: `foo.Foo *myFoo = new foo.Foo(foo.FOO_INIT)`
-- Strong object-oriented design, but type hierarchies (Java): a Child is a Person, a Guardian is a Person, a Person is a Human, a Human is a Mammal, etc..
+- Reduce stuttering: `foo.Foo *myFoo = new foo.Foo(foo.FOO_INIT)`
+- Strong object-oriented design, but no type hierarchies (Java): a Child is a Person, a Guardian is a Person, a Person is a Human, a Human is a Mammal, etc..
 - Robust toolset for compiling, testing, profiling, and debugging
 
 * Hello World!
@@ -85,7 +85,7 @@ Native* Perl, PHP, Node, Ruby?
 
 * Object-Oriented: Go Interfaces
 
-Go's approach to object-oriented programming. No extends or implments needed.
+Go's approach to object-oriented programming. No extends or implements needed.
 
 .code code/interface.go /START decl OMIT/,/END decl OMIT/
 
@@ -134,11 +134,9 @@ Many different permutations of GOOS and GOARCH.
 
 *Who*
 
-- Google (of course)
-- CDNs like CloudFlare & Fastly
-- Dropbox
-- SoundCloud
-- Netflix
+- Big: Google (of course), CloudFlare, Dropbox, SoundCloud, Netflix
+- Medium: Fastly, SendGrid, GoPro, Daily Burn
+- Small: MadGlory, Odd Networks, Apprenda
 
 *What*
 
@@ -146,6 +144,8 @@ Many different permutations of GOOS and GOARCH.
 - Databases: InfluxDB, CockroachDB, DGraph
 - Web Services: Prometheus (monitoring), Gogs (self-hosted Git), Geth (Ethereum-based blockchain)
 - AI & Machine Learning
+- Web Development: REST services, CMS (gohugo.io), etc.
+- Queuing: NSQ, Nats.io
 
 * Go Benefits for Everyone
 
@@ -162,3 +162,11 @@ Many different permutations of GOOS and GOARCH.
 - Go developers are increasing in numbers
 - Lower infrastructure costs due to lower memory and processing needs
 - Robust production systems reduce developer context switching for support and bug fixes
+
+* Further Resources
+
+.link http://golang.org
+.link https://golang.org/help
+.link https://github.com/golang/go
+.link https://github.com/golang/go/wiki
+.link https://slack.agnostechvalley.com
