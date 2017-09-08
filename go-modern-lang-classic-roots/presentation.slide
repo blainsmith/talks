@@ -26,6 +26,12 @@ Lots of smart Googlers whiteboarded in late-2007 and Go 1.0 releases in 2012
 - Russ Cox (@_rsc): Go compiler work
 - Ian Lance Tayler: Go compiler work
 
+* Why is it called "Go"?
+
+.image https://static01.nyt.com/images/2016/02/01/business/01go-pic/01go-pic-tmagArticle.jpg
+
+.link https://en.wikipedia.org/wiki/Go_(game)
+
 * Biggest Question: Why create Go?
 
 - Not many new systems languages created in over a decade
