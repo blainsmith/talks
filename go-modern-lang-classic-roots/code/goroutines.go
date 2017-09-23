@@ -15,5 +15,6 @@ func main() {
 		go PrintSquare(num)
 	}
 
-	time.Sleep(2 * time.Second)
+	// Force the main() goroutine to wait until all others finish
+	time.Sleep(5 * time.Second)
 }
