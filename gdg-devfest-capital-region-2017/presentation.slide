@@ -1,0 +1,196 @@
+Concurrency
+GDG DevFest Capital Region 2017
+28 Oct 2017
+
+Blain Smith
+http://bearded.af
+http://github.com/blainsmith/talks
+http://agnostechvalley.com
+@blainsmith
+@agnostechvalley
+
+* Obligatory Intro
+
+*MadGlory*, Legendary Game Services
+
+Recommendation engines, Online profiles, Tournament systems
+
+.link http://madglory.com
+
+*Odd* *Networks*, Next Generation TV Experiences
+
+Video analytics, Intelligent caching, Content delivery APIs, App design & development
+
+.link https://oddnetworks.com
+
+*Open* *Source*
+
+Newb Go contributor, Full-text search with Redis (Go), Seahash ported to Go, some other Node.js things too
+
+* So, what is "concurrency"?
+
+"[C]oncurrency is the *composition* of independently executing processes, while parallelism is the *simultaneous* *execution* of (possibly related) computations. Concurrency is about *dealing* with lots of things at once. Parallelism is about *doing* lots of things at once."
+
+- *compostion/dealing*: This is how we, as software engineers, *write* *code* to allow for processes to execute.
+- *simultaneous/doing*: When our software is running those processes *could* execute at the same time.
+- You can *write* *concurrent* *code*, but it it does not mean it will run *simultaneously*. Concurrent code cannot run in parallel on a single core.
+- If that same code is put on a multi-core machine then it could run in parallel without code changes.
+
+* How does Go support concurrency?
+
+Communicating Sequential Processes (CSP) is a formal language for describing patterns of interaction in concurrent systems by way of message passing via *channels* from one *process* to another.
+
+.link http://usingcsp.com
+
+- *channels*: This is the commication method Go supports that is a first class citizen "channel" that is typed.
+- *processes*: Spawning a process in Go is called a goroutine. Weighing in at around 4k per spawned goroutine.
+
+    configchan := make(chan Cfg)
+
+    +-------------------------+   Cfg{3, true}   +-------------------------+
+    | go processA(configchan) <------------------> go processB(configchan) |
+    +-------------------------+                  +-------------------------+
+
+* What kinds of concurrency patterns exist?
+
+- Coroutines
+- Wait Groups
+- Futures and promises
+- Generators
+- Semaphores and mutexes
+- Producers/Fan Out
+- Consumers/Fan In
+- Piplines
+
+* Coroutines Visual
+
+"[C]omponents that generalize subroutines for non-preemptive multitasking..."
+
+    +----------------+
+    |      main      |
+    +-------+--------+
+            |
+            |
+            |
+    +-------+---------
+    |  expensiveTask |
+    +-----------------
+
+* Coroutines Code
+
+.play code/coroutines.go
+
+* Wait Groups
+
+"A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for. Then each of the goroutines runs and calls Done when finished. At the same time, Wait can be used to block until all goroutines have finished."
+
+* Wait Groups Code
+
+.play code/fast-exit.go  /START fast-exit OMIT/,/END fast-exit OMIT/
+
+* Wait Groups Code cont.
+
+Adding a WaitGroup blocks the main goroutine from exiting so we can wait for the rest to complete.
+
+.play code/waitgroup.go  /START waitgroup OMIT/,/END waitgroup OMIT/
+
+* Futures and Promises Visual
+
+"[C]onstructs used for synchronizing program execution. [A]n object that acts as a proxy for a result that is initially unknown, usually because the computation of its value is yet incomplete."
+
+    +------------+          +------------------------+
+    |    main    +----------> expensiveSquareCompute |
+    |     +      <----------+                        |
+    |     |      |          +------------------------+
+    |     |      +----------> expensiveSquareCompute |
+    |     |      <----------+                        |
+    |     v      |          +------------------------+
+    | addSquares +----------> expensiveSquareCompute |
+    |            <----------+                        |
+    +------------+          +------------------------+
+
+* Futures and Promises Code
+
+.play code/futures-promises.go  /START main OMIT/,/END main OMIT/
+
+* Generators Visual
+
+"[S]pecial routine that can be used to control the iteration behaviour of a loop. [L]ooks like a function but behaves like an iterator."
+
+    +----------------+                 +----------------+          +----------------+
+    |      main      +----------------->   generateIDs  +---------->   func()       |
+    +----------------+                 +----------------+          +----------------+
+                                                        |          +----------------+
+                                                        +---------->   func()       |
+                                                        |          +----------------+
+                                                        |          +----------------+
+                                                        +---------->   func()       |
+                                                                   +----------------+
+
+* Generators Code
+
+.code code/generators.go  /START generator-1 OMIT/,/END generator-1 OMIT/
+
+* Generators Code cont.
+
+.play code/generators.go  /START generator-2 OMIT/,/END generator-2 OMIT/
+
+* Semaphores/Mutexes Visual
+
+"[A] variable or abstract data type used to control access to a common resource by multiple processes in a concurrent system such as a multiprogramming operating system."
+
+    +----------------+          +----------------+
+    |      main      <----X-----+   func()       | count++
+    |                |          +----------------+
+    |   count = 10   |          +----------------+
+    |                <----X-----+   func()       | count += 5
+    |                |          +----------------+
+    |                |          +----------------+
+    |                <----------+   func()       | count = 0
+    +----------------+          +----------------+
+
+* Semaphores/Mutexes (Data Race)
+
+.play code/data-race.go   /START data-race OMIT/,/END data-race OMIT/
+
+* Semaphores/Mutexes cont.
+
+.play code/mutex.go   /START mutex OMIT/,/END mutex OMIT/
+
+* Produce/Fan Out Visual
+
+* Produce/Fan Out Code
+
+.code code/fan-out.go   /START fan-out-1 OMIT/,/END fan-out-1 OMIT/
+
+* Produce/Fan Out Code cont.
+
+.play code/fan-out.go   /START fan-out-2 OMIT/,/END fan-out-2 OMIT/
+
+* Consume/Fan In Visual
+
+* Consume/Fan In Code
+
+.play code/fan-in.go   /START fan-in-1 OMIT/,/END fan-in-1 OMIT/
+
+* Consume/Fan In Code cont.
+
+.play code/fan-in.go   /START fan-in-2 OMIT/,/END fan-in-2 OMIT/
+
+* Consume/Fan In Code cont.
+
+.play code/fan-in.go   /START fan-in-3 OMIT/,/END fan-in-3 OMIT/
+
+* Pipeline Visual
+
+* Pipeline Code
+
+.play code/pipeline.go   /START pipeline OMIT/,/END pipeline OMIT/
+
+* Things to remember...
+
+"Don't communicate by sharing memory, share memory by communicating."
+
+"Concurrency is not parallelism."
+
+"Channels orchestrate; mutexes serialize."
