@@ -54,7 +54,7 @@ func main() {
 		}
 	}()
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(10 * time.Millisecond)
 }
 
 // END generator-2 OMIT

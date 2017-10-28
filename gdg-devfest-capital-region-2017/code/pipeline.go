@@ -37,6 +37,17 @@ func dbl(in <-chan int) <-chan int {
 	return out
 }
 
+func mult(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			out <- n * 10000
+		}
+		close(out)
+	}()
+	return out
+}
+
 func combine(cs ...<-chan int) <-chan int {
 	var wg sync.WaitGroup
 	wg.Add(len(cs))
@@ -78,7 +89,11 @@ func main() {
 
 	cdbl := combine(dbl1, dbl2) // collect the double resultscd
 
-	for result := range cdbl {
+	mul1 := mult(cdbl)
+	mul2 := mult(cdbl)
+	mul3 := mult(cdbl)
+
+	for result := range combine(mul1, mul2, mul3) {
 		fmt.Println(result)
 	}
 

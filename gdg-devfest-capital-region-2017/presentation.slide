@@ -54,10 +54,11 @@ Communicating Sequential Processes (CSP) is a formal language for describing pat
 * What kinds of concurrency patterns exist?
 
 - Coroutines
+- Timeouts
 - Wait Groups
-- Futures and promises
+- Semaphores and Mutexes
+- Futures and Promises
 - Generators
-- Semaphores and mutexes
 - Producers/Fan Out
 - Consumers/Fan In
 - Piplines
@@ -78,64 +79,27 @@ Communicating Sequential Processes (CSP) is a formal language for describing pat
 
 * Coroutines Code
 
-.play code/coroutines.go
+.play code/coroutines.go  /START coroutines OMIT/,/END coroutines OMIT/
+
+* Coroutines with Timeout
+
+.play code/timeouts.go  /START timeouts OMIT/,/END timeouts OMIT/
 
 * Wait Groups
 
 "A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for. Then each of the goroutines runs and calls Done when finished. At the same time, Wait can be used to block until all goroutines have finished."
 
-* Wait Groups Code
+* Wait Groups
 
 .play code/fast-exit.go  /START fast-exit OMIT/,/END fast-exit OMIT/
 
-* Wait Groups Code cont.
+* Wait Groups Code
 
 Adding a WaitGroup blocks the main goroutine from exiting so we can wait for the rest to complete.
 
 .play code/waitgroup.go  /START waitgroup OMIT/,/END waitgroup OMIT/
 
-* Futures and Promises Visual
-
-"[C]onstructs used for synchronizing program execution. [A]n object that acts as a proxy for a result that is initially unknown, usually because the computation of its value is yet incomplete."
-
-    +------------+          +------------------------+
-    |    main    +----------> expensiveSquareCompute |
-    |     +      <----------+                        |
-    |     |      |          +------------------------+
-    |     |      +----------> expensiveSquareCompute |
-    |     |      <----------+                        |
-    |     v      |          +------------------------+
-    | addSquares +----------> expensiveSquareCompute |
-    |            <----------+                        |
-    +------------+          +------------------------+
-
-* Futures and Promises Code
-
-.play code/futures-promises.go  /START main OMIT/,/END main OMIT/
-
-* Generators Visual
-
-"[S]pecial routine that can be used to control the iteration behaviour of a loop. [L]ooks like a function but behaves like an iterator."
-
-    +----------------+                 +----------------+          +----------------+
-    |      main      +----------------->   generateIDs  +---------->   func()       |
-    +----------------+                 +----------------+          +----------------+
-                                                        |          +----------------+
-                                                        +---------->   func()       |
-                                                        |          +----------------+
-                                                        |          +----------------+
-                                                        +---------->   func()       |
-                                                                   +----------------+
-
-* Generators Code
-
-.code code/generators.go  /START generator-1 OMIT/,/END generator-1 OMIT/
-
-* Generators Code cont.
-
-.play code/generators.go  /START generator-2 OMIT/,/END generator-2 OMIT/
-
-* Semaphores/Mutexes Visual
+* Semaphores/Mutexes
 
 "[A] variable or abstract data type used to control access to a common resource by multiple processes in a concurrent system such as a multiprogramming operating system."
 
@@ -153,39 +117,133 @@ Adding a WaitGroup blocks the main goroutine from exiting so we can wait for the
 
 .play code/data-race.go   /START data-race OMIT/,/END data-race OMIT/
 
-* Semaphores/Mutexes cont.
+* Semaphores/Mutexes
 
 .play code/mutex.go   /START mutex OMIT/,/END mutex OMIT/
 
-* Produce/Fan Out Visual
+* Futures and Promises
 
-* Produce/Fan Out Code
+"[C]onstructs used for synchronizing program execution. [A]n object that acts as a proxy for a result that is initially unknown, usually because the computation of its value is yet incomplete."
+
+    +------------+          +------------------------+
+    |    main    +----------> expensiveSquareCompute |
+    |     +      <----------+                        |
+    |     |      |          +------------------------+
+    |     |      +----------> expensiveSquareCompute |
+    |     |      <----------+                        |
+    |     v      |          +------------------------+
+    | addSquares +----------> expensiveSquareCompute |
+    |            <----------+                        |
+    +------------+          +------------------------+
+
+* Futures and Promises
+
+.play code/futures-promises.go  /START main OMIT/,/END main OMIT/
+
+* Generators
+
+"[S]pecial routine that can be used to control the iteration behaviour of a loop. [L]ooks like a function but behaves like an iterator."
+
+    +----------------+                 +----------------+          +----------------+
+    |      main      +----------------->   generateIDs  +---------->   func()       |
+    +----------------+                 +----------------+          +----------------+
+                                                        |          +----------------+
+                                                        +---------->   func()       |
+                                                        |          +----------------+
+                                                        |          +----------------+
+                                                        +---------->   func()       |
+                                                                   +----------------+
+
+* Generators
+
+.code code/generators.go  /START generator-1 OMIT/,/END generator-1 OMIT/
+
+* Generators
+
+.play code/generators.go  /START generator-2 OMIT/,/END generator-2 OMIT/
+
+* Produce/Fan Out
+
+A instance where a process spawns other processes to perform a task, but does not return the results to the calling process.
+
+    +----------------+          +----------------+
+    |      main      +---------->   bgJob()      |
+    |                |          +----------------+
+    |                |          +----------------+
+    |                +---------->   bgJob()      |
+    |                |          +----------------+
+    |                |          +----------------+
+    |                +---------->   bgJob()      |
+    +----------------+          +----------------+
+
+* Produce/Fan Out
 
 .code code/fan-out.go   /START fan-out-1 OMIT/,/END fan-out-1 OMIT/
 
-* Produce/Fan Out Code cont.
+* Produce/Fan Out Code
 
 .play code/fan-out.go   /START fan-out-2 OMIT/,/END fan-out-2 OMIT/
 
-* Consume/Fan In Visual
+Notice we are not collecting the results of the sq() function.
 
-* Consume/Fan In Code
+* Consume/Fan In
+
+A instance where a process spawns other processes to perform a task. The spawned processes return the result of their work either to the calling process or allow another process to read them.
+
+    +----------------+          +----------------+
+    |      main      +---------->   someTask()   +--+
+    |                |          +----------------+  |
+    |                |          +----------------+  |
+    |                +---------->   someTask()   +--+
+    |                |          +----------------+  |
+    |                |          +----------------+  |
+    |                +---------->   someTask()   +--+
+    +-------^--------+          +----------------+  |
+            |                                       |
+            +---------------------------------------+
+
+* Consume/Fan In
 
 .play code/fan-in.go   /START fan-in-1 OMIT/,/END fan-in-1 OMIT/
 
-* Consume/Fan In Code cont.
+sq() now creates a channel in which to send its results on and returns it.
+
+* Consume/Fan In
 
 .play code/fan-in.go   /START fan-in-2 OMIT/,/END fan-in-2 OMIT/
 
-* Consume/Fan In Code cont.
+* Consume/Fan In
 
 .play code/fan-in.go   /START fan-in-3 OMIT/,/END fan-in-3 OMIT/
 
-* Pipeline Visual
+* Pipelines
 
-* Pipeline Code
+"[A] pipeline consists of a chain of processing elements (processes, threads, coroutines, functions, etc.), arranged so that the output of each element is the input of the next; the name is by analogy to a physical pipeline."
+
+    +---------------+   +------------+   +------------+   +------------+   +---------------+
+    |   produce()   +---> +--------+ +---> +--------+ +---> +--------+ +--->   consume()   |
+    +---------------+   | | work() | |   | | work() | |   | | work() | |   +---------------+
+                        | +--------+ |   | +--------+ |   | +--------+ |
+                        |            |   |            |   |            |
+                        | +--------+ |   | +--------+ |   | +--------+ |
+                        | | work() | |   | | work() | |   | | work() | |
+                        | +--------+ |   | +--------+ |   | +--------+ |
+                        |            |   |            |   |            |
+                        | +--------+ |   | +--------+ |   | +--------+ |
+                        | | work() | |   | | work() | |   | | work() | |
+                        | +--------+ |   | +--------+ |   | +--------+ |
+                        +------------+   +------------+   +------------+
+
+* Pipelines
 
 .play code/pipeline.go   /START pipeline OMIT/,/END pipeline OMIT/
+
+* On Goroutines and Channels
+
+- Each goroutine costs 4 kilobytes of memory
+- Channels are typed, so you can send user defined types and structs over them
+- os/signal has a good use of channels in the stdlib
+- net/http spawns a goroutine to handle each incoming request
 
 * Things to remember...
 
@@ -194,3 +252,11 @@ Adding a WaitGroup blocks the main goroutine from exiting so we can wait for the
 "Concurrency is not parallelism."
 
 "Channels orchestrate; mutexes serialize."
+
+Use channels and goroutines when appropriate. Not everything has to be done over channels.
+
+* Further Reading
+
+.link https://www.goinggo.net/2017/10/the-behavior-of-channels.html
+.link https://blog.golang.org/concurrency-is-not-parallelism
+.link https://blog.golang.org/context
