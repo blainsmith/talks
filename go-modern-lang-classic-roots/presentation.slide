@@ -1,12 +1,11 @@
 Go: Modern Language with Classic Roots
-Sharatoga TechTalks
-20 Sep 2017
 
 Blain Smith
+
 http://bearded.af
-http://github.com/blainsmith/talks
-http://agnostechvalley.com
 @blainsmith
+
+http://agnostechvalley.com
 @agnostechvalley
 
 * What is Go?
@@ -16,23 +15,29 @@ http://agnostechvalley.com
 - Concurrency
 - Garbage Collection
 
+.image ./img/gopher-lifting.gif
+
 * Who created Go?
 
 Lots of smart Googlers whiteboarded in late-2007 and Go 1.0 releases in 2012
 
 - Robert Griesemer: 15 years in C++, language designer
-- Rob Pike (@rob_pike): AT&T Bell Labs, Plan9 system designer, first window system for Unix
-- Ken Thompson: AT&T Bell Labs, Plan9 system designer, created B programming language
-- Russ Cox (@_rsc): Go compiler work
-- Ian Lance Tayler: Go compiler work
+- Rob Pike (@rob_pike) & Ken Thompson: AT&T Bell Labs, Plan9 system designer, first window system for Unix, B programming language
+- Russ Cox (@_rsc) & Ian Lance Tayler: Go compiler work
+
+.image ./img/vintage-att.jpg
 
 * Why is it called "Go"?
 
-.image https://static01.nyt.com/images/2016/02/01/business/01go-pic/01go-pic-tmagArticle.jpg
+.image ./img/inspector-gadget.gif
 
-.link https://en.wikipedia.org/wiki/Go_(game)
+* Why is it called "Go"?
 
-* Biggest Question: Why create Go?
+.image ./img/alphago.gif
+
+.link https://www.alphagomovie.com
+
+* Why create Go?
 
 - Not many new systems languages created in over a decade
 - Very connected world with the internet
@@ -40,20 +45,28 @@ Lots of smart Googlers whiteboarded in late-2007 and Go 1.0 releases in 2012
 - Massive clusters of computers
 - Older systems languages like C and C++ designed prior to these advancements
 
-Native* Perl, PHP, Node, Ruby?
+.image ./img/caddy-shack-gopher.gif
 
-- Dynamic languages with no type safety
-- Single threaded processes so no true concurrency
-- Interpreted and not compiled into executables
-
-"Native" meaning support in the standard library without extra tooling or server setup.
-
-* GOals
+* Primary GOals
 
 - Safety: type and memory safe
 - Offer concurrency and communication
 - Efficient low-latency garbage collection
 - Fast compile
+- Simplicity and readability
+
+.image ./img/hockey-spin-goal.gif
+
+* Features in Go
+
+- Go is purposefully different.
+- Go does not try to be like the other languages.
+- Go does not compete on features.
+- Adding features to Go would not make it better, just bigger. That would make Go less interesting by being less different.
+
+.link https://talks.golang.org/2015/simplicity-is-complicated.slide#9
+
+.image ./img/kiss.gif
 
 * Go's Design
 
@@ -63,23 +76,27 @@ Native* Perl, PHP, Node, Ruby?
 - Strong object-oriented design, but no type hierarchies (Java): a Child is a Person, a Guardian is a Person, a Person is a Human, a Human is a Mammal, etc..
 - Robust toolset for compiling, testing, profiling, and debugging
 
-* Hello World!
-
-1. Save source
-2. Send to server over internet
-3. Compile
-4. Run on remote server
-5. Send results back
-
-.play code/helloworld.go
-
-.link http://play.golang.org
+.image ./img/gopher-coding.gif
 
 * Go's Highlights
 
 - Object-oriented with virtual interfaces
 - Concurrency with goroutines and channels
 - Built-in modern tooling
+
+.image ./img/highlights.gif
+
+* Hello World!
+
+.play code/helloworld.go
+
+.link http://play.golang.org
+
+.image ./img/blainsmith-gopher.png
+
+* Concurrent Fibonacci
+
+.play code/fibonacci.go
 
 * Object-Oriented: Java Inheritence
 
@@ -104,6 +121,12 @@ Go's approach to object-oriented programming. No extends or implements needed.
 - Introduces more flexibility when creating objects and interfaces
 - Makes extending and interacting with the Go standard libary very nice
 
+* Concurrency with CSP
+
+Communicating Sequential Processes (CSP) is a formal language for describing patterns of interaction in concurrent systems by way of message passing via *channels* from one *process* to another.
+
+.image ./img/concurrency.gif
+
 * Goroutines and Channels
 
 - Concurrency is hard. PERIOD!
@@ -120,6 +143,18 @@ Go's approach to object-oriented programming. No extends or implements needed.
 
 .play code/channels.go
 
+* What kinds of concurrency patterns can you construct?
+
+- Coroutines
+- Timeouts
+- Wait Groups
+- Semaphores and Mutexes
+- Futures and Promises
+- Generators
+- Producers/Fan Out
+- Consumers/Fan In
+- Piplines
+
 * Tooling: Cross Compile
 
 .code code/cross-compile.txt
@@ -128,9 +163,11 @@ Many different permutations of GOOS and GOARCH.
 
 .link https://build.golang.org
 
+.image ./img/voltron.gif
+
 * Tooling: Performance Profiling
 
-.image https://blog.golang.org/profiling-go-programs_havlak1a-75.png
+.image ./img/profile-graph.png
 
 * Tooling: Performance Profiling (cont.)
 
@@ -142,7 +179,7 @@ Many different permutations of GOOS and GOARCH.
 
 - Big: Google (of course), CloudFlare, Dropbox, SoundCloud, Netflix
 - Medium: Fastly, SendGrid, GoPro, Daily Burn
-- Small: MadGlory, Odd Networks, Apprenda
+- Small: Kinetic, MadGlory, Odd Networks, Apprenda
 
 *What*
 
@@ -153,7 +190,7 @@ Many different permutations of GOOS and GOARCH.
 - Web Development: REST services, CMS (gohugo.io), etc.
 - Queuing: NSQ, Nats.io
 
-* Go Benefits for Everyone
+* Go Benefits
 
 *Developers*
 
@@ -163,16 +200,22 @@ Many different permutations of GOOS and GOARCH.
 - StdLib: Math, OS, IO, HTTP, Hashing, Networking, Logging, CLI Parsing
 - Side effect of learning idioms and concepts that stem from classic computer science
 
+.image ./img/hackers.gif
+
+* Go Benefits
+
 *Businesses*
 
-- Go developers are increasing in numbers
+- Go developers are increasing in numbers (28,000+ members in the Go Slack group)
 - Lower infrastructure costs due to lower memory and processing needs
 - Robust production systems reduce developer context switching for support and bug fixes
+
+.image ./img/emperor-palpatine-good.gif
 
 * Further Resources
 
 .link http://golang.org
-.link https://golang.org/help
 .link https://github.com/golang/go
-.link https://github.com/golang/go/wiki
 .link https://slack.agnostechvalley.com
+
+.image https://media.giphy.com/media/JEhCPFfqi2Hy8/giphy.gif
