@@ -1,12 +1,8 @@
 # Compile for local machine
 > go build main.go
 
-# GOOS to specify operating system
-> GOOS=linux go build main.go
-> GOOS=darwin go build main.go
-> GOOS=windows go build main.go
+# Compile for Windows i386
+> GOOS=windows GOARCH=386 go build main.go
 
-# GOARCH to specify chip architecture
-> GOARCH=amd64 go build main.go
-> GOARCH=386 go build main.go
-> GOARCH=arm go build main.go
+# Compile for Linux ARMv7
+> GOOS=linux GOARCH=armv7 go build main.go
