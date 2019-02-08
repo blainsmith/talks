@@ -11,21 +11,19 @@ http://agnostechvalley.com
 
 * Obligatory Intro
 
-*MadGlory*, Legendary Game Services
+*Kinetic*, wearable technology to reduce unsafe postures in the workplace
 
-Recommendation engines, Online profiles, Tournament systems
+.link https://wearkinetic.com
 
-.link http://madglory.com
-
-*Odd* *Networks*, Next Generation TV Experiences
-
-Video analytics, Intelligent caching, Content delivery APIs, App design & development
+*Odd* *Networks*, video analytics, intelligent caching, content delivery APIs, app design & development
 
 .link https://oddnetworks.com
 
-*Open* *Source*
+*MadGlory*, Legendary Game Services like recommendation engines, online profiles, tournament systems
 
-Newb Go contributor, Full-text search with Redis (Go), Seahash ported to Go, some other Node.js things too
+.link http://madglory.com
+
+*Open* *Source*, newb Go contributor, full-text search with Redis (Go), seahash ported to Go, some other Node.js things too
 
 * So, what is "concurrency"?
 
@@ -240,7 +238,7 @@ sq() now creates a channel in which to send its results on and returns it.
 
 * On Goroutines and Channels
 
-- Each goroutine costs 4 kilobytes of memory
+- Each goroutine costs 2 kilobytes of memory
 - Channels are typed, so you can send user defined types and structs over them
 - os/signal has a good use of channels in the stdlib
 - net/http spawns a goroutine to handle each incoming request

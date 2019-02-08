@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 // START fan-in-1 OMIT
@@ -66,8 +65,6 @@ func main() {
 	for result := range combine(sq1, sq2, sq3) {
 		fmt.Println(result)
 	}
-
-	time.Sleep(1 * time.Second)
 }
 
 // END fan-in-3 OMIT

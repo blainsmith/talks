@@ -78,17 +78,12 @@ func main() {
 	sqe1 := sq(evens) // 3 routines to square even numbers
 	sqe2 := sq(evens)
 	sqe3 := sq(evens)
-
 	sqo1 := sq(odds) // 2 routines to square odd numbers
 	sqo2 := sq(odds)
-
 	csq := combine(sqe1, sqe2, sqe3, sqo1, sqo2) // collect the square results
-
-	dbl1 := dbl(csq) // 2 routines to double the results
+	dbl1 := dbl(csq)                             // 2 routines to double the results
 	dbl2 := dbl(csq)
-
 	cdbl := combine(dbl1, dbl2) // collect the double resultscd
-
 	mul1 := mult(cdbl)
 	mul2 := mult(cdbl)
 	mul3 := mult(cdbl)
